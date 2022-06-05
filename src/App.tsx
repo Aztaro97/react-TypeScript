@@ -13,6 +13,8 @@ const App: React.FC = () => {
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source } = result;
+    console.log(result);
+
     if (!destination) {
       return;
     }
@@ -23,6 +25,28 @@ const App: React.FC = () => {
     ) {
       return;
     }
+
+    let add;
+    let active = todos;
+    let complete = todosComplete;
+    // Source Logic
+    if (source.droppableId === "todoListActive") {
+      add = active[source.index];
+      active.splice(source.index, 1);
+    } else {
+      add = complete[source.index];
+      complete.splice(source.index, 1);
+    }
+
+    // Destination Logic
+    if (destination.droppableId === "todoListActive") {
+      active.splice(destination.index, 0, add);
+    } else {
+      complete.splice(destination.index, 0, add);
+    }
+
+    setTodosComplete(complete);
+    setTodos(active);
   };
 
   const handleAdd = (e: React.FormEvent) => {
