@@ -32,9 +32,9 @@ const SingleTodo: React.FC<SingleTodoProps> = ({
 
   const handleDelete = (id: String) => {
     setTodos([...todos.filter((ele) => ele.id !== id)]);
+    setTodosComplete([...todosComplete.filter((ele) => ele.id !== id)]);
   };
 
-  //   setTodosComplete([...todosComplete, todo]);
   const handleDone = (id: String) => {
     setTodos(
       todos.map((todo) =>
@@ -52,12 +52,14 @@ const SingleTodo: React.FC<SingleTodoProps> = ({
 
   return (
     <Draggable draggableId={todo.id.toString()} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <form
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="flex justify-between items-center p-4 bg-gray-300 rounded-lg"
+          className={`flex justify-between items-center p-4 bg-gray-300 rounded-lg ${
+            snapshot.isDragging ? "drop-shadow-md" : ""
+          }  `}
           onSubmit={(e) => {
             e.preventDefault();
             handleDone(todo.id);
@@ -74,24 +76,24 @@ const SingleTodo: React.FC<SingleTodoProps> = ({
             <p>{todo.title}</p>
           )}
 
-          <div className="flex items-center justify-center gap-5">
+          <div className="flex items-center justify-center gap-1">
             <button
               type="button"
               onClick={() => handleEdit()}
-              className="text-md hover:scale-150 transition-all"
+              className="text-xl p-2 hover:scale-150 transition-all"
             >
               <AiFillEdit />
             </button>
             <button
               type="button"
               onClick={() => handleDelete(todo.id)}
-              className="text-md hover:scale-150 transition-all"
+              className="text-xl p-2 hover:scale-150 transition-all"
             >
               <MdDelete />
             </button>
             <button
               type="submit"
-              className="text-md hover:scale-150 transition-all"
+              className="text-xl p-2 hover:scale-150 transition-all"
             >
               <MdDone />
             </button>
